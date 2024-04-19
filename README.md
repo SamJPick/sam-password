@@ -23,9 +23,9 @@ they never appear on-screen.
 * Use existing encryption keys for a password:
     1. Execute `sam-password -g sitename` to copy the password for `sitename` to 
     the clipboard. This only works if `sam-password -n sitename` has previously 
-    been run, and `sitename`'s section has not been removed from 
+    been executed, and `sitename`'s section has not been removed from
     `~/.sam-password-keys`.
-    2. Execute `xsel -b -c` to clear the clipboard after you use the password.
+    3. Execute `xsel -b -c` to clear the clipboard after you use the password.
 # Deleting encryption keys
 `sam-password` writes all encryption keys to `~/.sam-password-keys`. This file's 
 formatting will be as follows:
