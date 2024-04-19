@@ -6,7 +6,7 @@ then
     exit
 fi
 
-cp -r `find /home/ -type d -name sam-password` /tmp/sam-password
+cp -r `find /home/ -type d -name sam-password-main` /tmp/sam-password
 mv /tmp/sam-password/sam-password.sh /bin/sam-password
 gcc -o /bin/sam-password-encrypter /tmp/sam-password/sam-password-encrypter.c
 chmod 777 /bin/sam-password
