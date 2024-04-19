@@ -1,6 +1,6 @@
 # sam-password
-A Bash-based password manager that uses (a bad implementation of) AES-128 for
-encryption. Generates encrypted passwords based on (less secure) user passwords, 
+A Bash-based password manager for Linux that uses (a bad implementation of) AES-128
+for encryption. Generates encrypted passwords based on (less secure) user passwords, 
 and permanently stores nothing but encryption keys. Thus, one or more passwords 
 that are easy to remember can be used to generate far stronger passwords for
 many different sites, but neither the user's nor the final passwords will need 
