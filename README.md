@@ -3,7 +3,7 @@ A Bash-based password manager that uses (a bad implementation of) AES-128 for
 encryption. Generates encrypted passwords based on (less secure) user passwords, 
 and permanently stores nothing but encryption keys. Thus, one or more passwords 
 that are easy to remember can be used to generate far stronger passwords for
-many different sites, but neither the user nor final passwords will need to be 
+many different sites, but neither the user's nor final passwords will need to be 
 stored on the user's device. The user will need to clear their clipboard after 
 using passwords, as `sam-password` uses `xsel` to copy passwords to the 
 clipboard so that they never appear on-screen.
