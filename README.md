@@ -1,12 +1,12 @@
 # sam-password
 A Bash-based password manager for Linux that uses (a bad implementation of) AES-128
 for encryption. Generates encrypted passwords based on (less secure) user passwords, 
-and permanently stores nothing but encryption keys. Thus, one or more passwords 
-that are easy to remember can be used to generate far stronger passwords for many 
-different sites, but neither the user's nor the final passwords will need to be 
+and permanently stores nothing but encryption keys. Thus, one or more passwords that
+are easy to remember can be used to generate far stronger passwords for many 
+different sites, but neither the user's nor the encrypted passwords will need to be 
 stored on the user's device. The user will need to clear their clipboard after using 
-passwords, as `sam-password` uses `xsel` to copy passwords to the clipboard so that 
-they never appear on-screen.
+passwords, however, as `sam-password` uses `xsel` to copy passwords to the clipboard
+so that they never appear on-screen.
 # Setup
 1. Install `xsel` with the package manager of your choice.
 2. Download this repository as a zip file, then unzip it.

@@ -27,7 +27,7 @@ else
 				out=`sam-password-encrypter g $passwd $site`
 				if [ $? -eq 1 ]
 				then
-					echo 'sam-password: site name' $site 'not found'
+					echo 'sam-password: site name' "\"$site\"" 'not found'
 				else
 					echo -n $out | xsel -b
 					echo $'Encrypted password copied to clipboard. Run "xsel -b -c" to clear clipboard.'
