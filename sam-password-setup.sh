@@ -5,6 +5,10 @@ then
     echo $'sam-password-setup: Run sam-password-setup as root.'
     exit
 fi
+if ! command xsel &> /dev/null
+then
+	echo $'sam-password-setup: WARNING: xsel must be installed to use sam-password'
+fi
 
 cp -r `find /home/ -type d -name sam-password-main` /tmp/sam-password
 mv /tmp/sam-password/sam-password.sh /bin/sam-password

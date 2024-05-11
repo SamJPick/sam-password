@@ -13,7 +13,7 @@ else
 	while getopts "hn:g:" o; do
 		case $o in
 			h)
-				echo $'Usage:\nsam-password [option]\n\nOptions:\n-h\t\tDisplay this help information\n-n sitename\tGenerate an encrypted password for a specific site and copy this password to the clipboard (replace "sitename" with the name of the site that the password is for)\n-g sitename\tCopy an existing encrypted password for a specific site to the clipboard (replace "sitename" with the name of the site that the password is for)'
+				echo $'Usage:\nsam-password [option]\n\nOptions:\n-h\t\tDisplay this help information\n-n sitename\tGenerate an encrypted password for a specific site and copy this\n\t\tpassword to the clipboard (replace "sitename" with the name of\n\t\tthe site that the password is for)\n-g sitename\tCopy an existing encrypted password for a specific site to the\n\t\tclipboard (replace "sitename" with the name of the site that the\n\t\tpassword is for)'
 				;;
 			n)
 				site=$2
