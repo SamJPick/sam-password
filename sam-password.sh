@@ -19,7 +19,7 @@ else
 				site=$2
 				read -s -p $'Enter master password\n' passwd
 				sam-password-encrypter r $passwd $site | xsel -b
-				echo $'Encrypted password copied to clipboard. Run "xsel -b -c" to clear clipboard.'
+				echo $'Encrypted password copied to clipboard. Execute "xsel -b -c" to clear clipboard.'
 				;;
 			g)
 				site=$2
@@ -30,7 +30,7 @@ else
 					echo 'sam-password: site name' "\"$site\"" 'not found'
 				else
 					echo -n $out | xsel -b
-					echo $'Encrypted password copied to clipboard. Run "xsel -b -c" to clear clipboard.'
+					echo $'Encrypted password copied to clipboard. Execute "xsel -b -c" to clear clipboard.'
 				fi
 				;;
 		esac
