@@ -6,33 +6,53 @@ then
     exit
 fi
 
+OPTS=$(getopt -o hn:g:e: --long help,new:,get:,exists: -n 'sam-password' -- $@)
 if [ $# -lt 1 ]
 then
 	echo $'sam-password: Invalid number of arguments. Check inputs and try again or run "sam-password -h" for more information.'
 else
-	while getopts "hn:g:" o; do
-		case $o in
-			h)
-				echo $'Usage:\nsam-password [option]\n\nOptions:\n-h\t\tDisplay this help information\n-n sitename\tGenerate an encrypted password for a specific site and copy this\n\t\tpassword to the clipboard (replace "sitename" with the name of\n\t\tthe site that the password is for)\n-g sitename\tCopy an existing encrypted password for a specific site to the\n\t\tclipboard (replace "sitename" with the name of the site that the\n\t\tpassword is for)'
+	eval set -- "$OPTS"
+	while true; do
+		case "$1" in
+			-h | --help)
+				echo $'Usage:\n sam-password [option] [sitename]\n\nOptions:\n -h, --help\t\tPrint this help message\n -n, --new [sitename]\tGenerate an encrypted password for a specific site name\n\t\t\tand copy this password to the clipboard\n -g, --get [sitename]\tCopy an existing encrypted password for a specific site\n\t\t\tname to the clipboard\n -e, --exists [sitename]\tCheck if password encryption keys exist for a\n\t\t\t\tspecific site name'
 				;;
-			n)
-				site=$2
+			-n | --new)
+				shift
+				site=$1
 				read -s -p $'Enter master password\n' passwd
 				sam-password-encrypter r $passwd $site | xsel -b
 				echo $'Encrypted password copied to clipboard. Execute "xsel -b -c" to clear clipboard.'
 				;;
-			g)
-				site=$2
+			-g | --get)
+				shift
+				site=$1
 				read -s -p $'Enter master password.\n' passwd
 				out=`sam-password-encrypter g $passwd $site`
 				if [ $? -eq 1 ]
 				then
-					echo 'sam-password: site name' "\"$site\"" 'not found'
+					echo "sam-password: site name \"$site\" not found"
 				else
 					echo -n $out | xsel -b
 					echo $'Encrypted password copied to clipboard. Execute "xsel -b -c" to clear clipboard.'
 				fi
 				;;
+			-e | --exists)
+				shift
+				site=$1
+				sam-password-encrypter ' ' ' ' $site ' ' &> /dev/null
+				if [ $? -eq 1 ]
+				then
+					echo "Password does not exist for site name \"$site\""
+				else
+					echo "Password exists for site name \"$site\""
+				fi
+				;;
+			--)
+				shift
+				break
+				;;
 		esac
+		shift
 	done
 fi

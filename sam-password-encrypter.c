@@ -124,13 +124,13 @@ uint8_t gmul(uint8_t a, uint8_t b) {
     return p;
 }
 
-// ARGS: sam-password [r or g] password site
+// ARGS: sam-password-encrypter [r or g] password site OR sam-password-encrypter ' ' ' ' site ' '
 int main(int argc, char *argv[]) {
 	uint8_t randFlag = streq(argv[1], "r", 2);
 	char *password = argv[2];
-	const uint8_t BLOCK_COUNT = (strlen(password) + 15) / 16;
     uint8_t FIRST_KEY[4][4];
 	uint8_t initVector[4][4];
+	const uint8_t BLOCK_COUNT = (strlen(password) + 15) / 16;
 	if (!randFlag) {
         // Read keys from ~/.sam-password-keys
 		char keysPath[PATH_MAX];
@@ -140,14 +140,19 @@ int main(int argc, char *argv[]) {
             printf("sam-password-encrypter: ~/.sam-password-keys inaccessible\n");
             return 1;
         }
-		int len = strlen(argv[3]) + 1;
-		char temp[len];
+		int len = strlen(argv[3]);
+		char temp[len + 2];
 		char *statusPointer = temp;
 		do {
-			statusPointer = fgets(temp, len, fp);
-		} while (statusPointer != NULL && !streq(temp, argv[3], len));
+			for (int i = 0; i < len + 2; i++) {
+				temp[i] = '\0';
+			}
+			statusPointer = fgets(temp, len + 2, fp);
+		} while (statusPointer != NULL && (!streq(temp, argv[3], len) || temp[len] != '\n'));
 		if (statusPointer != NULL) {
-			while (fgetc(fp) != '\n') {}
+			if (argc > 4) {
+				return 0;
+			}
 			for (int i = 0; i < 16; i++) {
 				char numStr[3];
 				numStr[0] = fgetc(fp);
