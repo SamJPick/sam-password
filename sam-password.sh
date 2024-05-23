@@ -27,13 +27,13 @@ else
 			-g | --get)
 				shift
 				site=$1
-				read -s -p $'Enter master password.\n' passwd
-				out=`sam-password-encrypter g $passwd $site`
+				sam-password-encrypter ' ' ' ' $site ' ' &> /dev/null
 				if [ $? -eq 1 ]
 				then
-					echo "sam-password: site name \"$site\" not found"
+					echo "sam-password: Password does not exist for site name \"$site\""
 				else
-					echo -n $out | xsel -b
+					read -s -p $'Enter master password.\n' passwd
+					echo -n `sam-password-encrypter g $passwd $site` | xsel -b
 					echo $'Encrypted password copied to clipboard. Execute "xsel -b -c" to clear clipboard.'
 				fi
 				;;
