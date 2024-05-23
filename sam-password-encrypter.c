@@ -127,10 +127,8 @@ uint8_t gmul(uint8_t a, uint8_t b) {
 // ARGS: sam-password-encrypter [r or g] password site OR sam-password-encrypter ' ' ' ' site ' '
 int main(int argc, char *argv[]) {
 	uint8_t randFlag = streq(argv[1], "r", 2);
-	char *password = argv[2];
     uint8_t FIRST_KEY[4][4];
 	uint8_t initVector[4][4];
-	const uint8_t BLOCK_COUNT = (strlen(password) + 15) / 16;
 	if (!randFlag) {
         // Read keys from ~/.sam-password-keys
 		char keysPath[PATH_MAX];
@@ -185,6 +183,8 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
+	char *password = argv[2];
+	const uint8_t BLOCK_COUNT = (strlen(password) + 15) / 16;
 	const uint8_t FIRST_IV[4][4] = {
 		{initVector[0][0], initVector[0][1], initVector[0][2], initVector[0][3]},
 		{initVector[1][0], initVector[1][1], initVector[1][2], initVector[1][3]},

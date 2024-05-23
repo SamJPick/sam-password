@@ -1,12 +1,12 @@
 # sam-password
-A Bash-based password manager for Linux that uses (a bad implementation of) AES-128
-for encryption. Generates encrypted passwords based on (less secure) user passwords, 
-and permanently stores nothing but encryption keys. Thus, one or more passwords that
-are easy to remember can be used to generate far stronger passwords for many 
-different sites, but neither the user's nor the encrypted passwords will need to be 
-stored on the user's device. The user will need to clear their clipboard after using 
-passwords, however, as `sam-password` uses `xsel` to copy passwords to the clipboard
-so that they never appear on-screen.
+A Bash-based password manager for Linux that uses (a bad implementation of)
+AES-128 for encryption. Generates encrypted passwords based on (less secure)
+user passwords, and permanently stores nothing but encryption keys. Thus, one or
+more passwords that are easy to remember can be used to generate far stronger
+passwords for many different sites, but neither the user's nor the encrypted
+passwords will need to be stored on the user's device. The user will need to
+clear their clipboard after using passwords, however, as `sam-password` uses
+`xsel` to copy passwords to the clipboard so that they never appear on-screen.
 # Setup
 1. Install `xsel` with the package manager of your choice.
 2. Download this repository as a zip file, then unzip it.
@@ -17,17 +17,20 @@ so that they never appear on-screen.
 # Usage
 * Generate encryption keys for a password:
     1. Execute `sam-password -n sitename` to create a new encrypted password for
-    `sitename` and copy it to the clipboard. Encryption keys will be stored in 
+    `sitename` and copy it to the clipboard. Encryption keys will be stored in
     `~/.sam-password-keys`.
     2. Execute `xsel -b -c` to clear the clipboard after you use the password.
 * Use existing encryption keys for a password:
-    1. Execute `sam-password -g sitename` to copy the password for `sitename` to 
-    the clipboard. This only works if `sam-password -n sitename` has previously 
+    1. Execute `sam-password -g sitename` to copy the password for `sitename` to
+    the clipboard. This only works if `sam-password -n sitename` has previously
     been executed, and `sitename`'s section has not been removed from
     `~/.sam-password-keys`.
     3. Execute `xsel -b -c` to clear the clipboard after you use the password.
+* Check if password encryption keys exist for a site:
+    1. Execute `sam-password -e sitename` to print a message indicating whether
+    encryption keys exist for `sitename` in `~/.sam-password-keys`.
 # Deleting encryption keys
-`sam-password` writes all encryption keys to `~/.sam-password-keys`. This file's 
+`sam-password` writes all encryption keys to `~/.sam-password-keys`. This file's
 formatting will be as follows:
 ```
 foo
@@ -42,7 +45,7 @@ baz
 [128 bit hex value]
 [128 bit hex value]
 ```
-To delete existing encryption keys for a certain site, delete that site's name 
-from this file as well as the two hex values beneath it. As long as the file is 
-formatted in the same way, `sam-password` should have no problems with parsing 
+To delete existing encryption keys for a certain site, delete that site's name
+from this file as well as the two hex values beneath it. As long as the file is
+formatted in the same way, `sam-password` should have no problems with parsing
 it.
