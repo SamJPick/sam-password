@@ -11,7 +11,7 @@ clear their clipboard after using passwords, however, as `sam-password` uses
 1. Install `xsel` with the package manager of your choice.
 2. Download this repository as a zip file, then unzip it.
 3. Execute `chmod +x` on the file in sam-password-main `sam-password-setup.sh`.
-4. Run `sam-password-setup.sh` with `sudo`.
+4. Execute `sudo sam-password-setup.sh`.
 5. You can now delete both the repository's zip file and its unzipped directory.
 `sam-password` and `sam-password-encrypter` should both be found in `/bin`.
 # Usage
