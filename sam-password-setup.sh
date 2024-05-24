@@ -5,7 +5,7 @@ then
     echo $'sam-password-setup: Run sam-password-setup as root.'
     exit
 fi
-if ! command xsel &> /dev/null
+if ! command -v xsel &> /dev/null
 then
 	echo $'sam-password-setup: WARNING: xsel must be installed to use sam-password'
 fi
