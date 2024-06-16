@@ -29,6 +29,9 @@ clear their clipboard after using passwords, however, as `sam-password` uses
 * Check if password encryption keys exist for a site:
     1. Execute `sam-password -e sitename` to print a message indicating whether
     encryption keys exist for `sitename` in `~/.sam-password-keys`.
+* List all site names for which keys exist:
+    1. Execute `sam-password -l` to print a newline-separated list of all site 
+    names in `~/.sam-password-keys`.
 # Deleting encryption keys
 `sam-password` writes all encryption keys to `~/.sam-password-keys`. This file's
 formatting will be as follows:

@@ -5,7 +5,14 @@
 #include <time.h>
 #include <string.h>
 
-uint8_t streq(char *a, char *b, int len) {
+enum mode {
+	RANDOM,
+	GET,
+	EXISTS,
+	LIST
+};
+
+uint8_t streq(const char *a, const char *b, const int len) {
 	for (int i = 0; i < len; i++) {
 		if (a[i] != b[i]) {
 			return 0;
@@ -67,17 +74,15 @@ uint32_t subWord(uint32_t word) {
     return result;
 }
 
-uint32_t rotWord(uint32_t word) {
-    uint8_t leftByte = word >> 24;
-    return (word << 8) + leftByte;
+uint32_t rotWord(const uint32_t word) {
+    return (word << 8) + (word >> 24);
 }
 
-uint32_t invRotWord(uint32_t word) {
-	uint8_t rightByte = word % 256;
-	return (word >> 8) + (rightByte << 24);
+uint32_t invRotWord(const uint32_t word) {
+	return (word >> 8) + ((word % 256) << 24);
 }
 
-uint32_t rcon(uint32_t rndNum) {
+uint32_t rcon(const uint32_t rndNum) {
     if (rndNum == 1) {
         return 0x01000000;
 	}
@@ -89,7 +94,7 @@ uint32_t rcon(uint32_t rndNum) {
     }
 }
 
-uint32_t roundWord(const uint8_t FIRST_KEY[4][4], uint8_t wordNum) {
+uint32_t roundWord(const uint8_t FIRST_KEY[4][4], const uint8_t wordNum) {
     if (wordNum < 4) {
         return (FIRST_KEY[wordNum][0] << 24) +
                (FIRST_KEY[wordNum][1] << 16) +
@@ -124,12 +129,52 @@ uint8_t gmul(uint8_t a, uint8_t b) {
     return p;
 }
 
-// ARGS: sam-password-encrypter [r or g] password site OR sam-password-encrypter ' ' ' ' site ' '
+// ARGS: sam-password-encrypter [r or g] password site OR sam-password-encrypter e site OR sam-password-encrypter l
 int main(int argc, char *argv[]) {
-	uint8_t randFlag = streq(argv[1], "r", 2);
+	enum mode mode;
+	switch (argv[1][0]) {
+		case 'r':
+			mode = RANDOM;
+			break;
+		case 'g':
+			mode = GET;
+			break;
+		case 'e':
+			mode = EXISTS;
+			break;
+		case 'l':
+			mode = LIST;
+			break;
+		default:
+			printf("sam-password-encrypter: invalid mode argument\n");
+			return 1;
+	}
+	if (mode == LIST) {
+		char keysPath[PATH_MAX];
+		sprintf(keysPath, "%s/.sam-password-keys", getenv("HOME"));
+		FILE *fp = fopen(keysPath, "r");
+        if (fp == NULL) {
+            printf("sam-password-encrypter: ~/.sam-password-keys inaccessible\n");
+            return 1;
+        }
+		while (!feof(fp)) {
+			char temp = fgetc(fp);
+			if (temp < '!') {
+				continue;
+			}
+			while (temp != '\n') {
+				printf("%c", temp);
+				temp = fgetc(fp);
+			}
+			printf("\n");
+			while (fgetc(fp) != '\n') {}
+			while (fgetc(fp) != '\n') {}
+		}
+		return 0;
+	}
     uint8_t FIRST_KEY[4][4];
 	uint8_t initVector[4][4];
-	if (!randFlag) {
+	if (mode != RANDOM) {
         // Read keys from ~/.sam-password-keys
 		char keysPath[PATH_MAX];
 		sprintf(keysPath, "%s/.sam-password-keys", getenv("HOME"));
@@ -138,7 +183,8 @@ int main(int argc, char *argv[]) {
             printf("sam-password-encrypter: ~/.sam-password-keys inaccessible\n");
             return 1;
         }
-		int len = strlen(argv[3]);
+		const char *comparedStr = argv[3 - (mode == EXISTS)];
+		int len = strlen(comparedStr);
 		char temp[len + 2];
 		char *statusPointer = temp;
 		do {
@@ -146,9 +192,9 @@ int main(int argc, char *argv[]) {
 				temp[i] = '\0';
 			}
 			statusPointer = fgets(temp, len + 2, fp);
-		} while (statusPointer != NULL && (!streq(temp, argv[3], len) || temp[len] != '\n'));
+		} while (statusPointer != NULL && (!streq(temp, comparedStr, len) || temp[len] != '\n'));
 		if (statusPointer != NULL) {
-			if (argc > 4) {
+			if (mode == EXISTS) {
 				return 0;
 			}
 			for (int i = 0; i < 16; i++) {
@@ -297,7 +343,7 @@ int main(int argc, char *argv[]) {
     		}
     	}
 	}
-	if (randFlag) {
+	if (mode == RANDOM) {
         // Print new keys to ~/.sam-password-keys
 		char keysPath[PATH_MAX];
 		sprintf(keysPath, "%s/.sam-password-keys", getenv("HOME"));
